@@ -1,0 +1,27 @@
+services:
+  
+  php:
+    build: php-fpm .
+    volumes:
+      - ./web/:/var/www/html/
+      - ./logs/nginx:/var/log/nginx/
+
+  nginx:
+    build: .
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - db
+    volumes:
+      - ./web/:/var/www/html/
+      - ./logs/nginx:/var/log/nginx/
+
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_DB_HOST: db
+      MARIADB_ROOT_PASSWORD: 1234
+      MARIADB_DATABASE: curd
+  
